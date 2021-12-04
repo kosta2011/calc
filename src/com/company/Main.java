@@ -172,30 +172,46 @@ public class Main {
                 //ввод с клавиатуры
                 Scanner consoleRAW = new Scanner(System.in);
                 String checkInput = consoleRAW.nextLine();
-                Scanner console = new Scanner(checkInput);
+
+
+                //Написать парсер который принимает строку и возвращает a op b
+                //Он должен обрабатывать все возможные исключения
+                String resStr = "";
+
+
+                //удаляем все пробелы введенные пользователем с начала строки
+                while (checkInput.charAt(0)==' '){
+                    if (checkInput.charAt(0) == (' ')) {
+                        checkInput = checkInput.substring(1);}
+                }
+                //удаляем все пробелы введенные пользователем с конца строки строки
+                while (checkInput.charAt(checkInput.length()-1)==' '){
+                    if (checkInput.charAt(checkInput.length()-1) == (' ')) {
+                        checkInput =  checkInput.substring(0, (checkInput.length() - 1));
+                    }
+                }
+                //удаляем все пробелы если они стоят вместе и оставляем только один
+                for (int i = 0;i<(checkInput.length());i++) {
+
+                    if ((checkInput.charAt(i) == (' ') && ((checkInput.charAt(i + 1) == (' '))))) {
+
+                    } else {
+                        resStr = resStr + checkInput.charAt(i);
+                    }
+                }
+                checkInput = resStr;
+
+
+
+
 
                 //обрабатываем сканер консоль получая стринг
                 //молимся на то чтобы пользователь ввел A + B
                 //код который проверяет не равен ли b.length() == 0
+
+                Scanner console = new Scanner(checkInput);
                 String a = console.next();
-                if ((checkInput.equals((a)))){
-                    error++;
-                    System.out.println("Возможно Вы забыли пробелы");
-
-                }
-                if (error>0){
-                    break;
-                }
-
-
-                String op = console.next();             //
-                if (checkInput.equals((a+" "+op))){
-                    error++;
-                    System.out.println("Возможно Вы забыли пробелы");
-                }
-                if (error>0){
-                    break;
-                }
+                String op = console.next();
                 String b = console.next();
 
 
@@ -219,6 +235,11 @@ public class Main {
                 if (error>0){
                     break;
                 }
+
+
+
+
+
 
 
                 //приводим строки к верхнему регистру (для удобства)
@@ -318,6 +339,7 @@ public class Main {
 
 /*
 
+текст чисто по приколу
 
             //Проверка на наличие операндов
             if ((a.equals("")) || b.equals("") || op.equals("")) {
