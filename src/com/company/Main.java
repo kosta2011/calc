@@ -176,19 +176,6 @@ public class Main {
                 //Он должен обрабатывать все возможные исключения
                 String resStr = "";
 
-/*
-                //удаляем все пробелы введенные пользователем с начала строки
-                while (checkInput.charAt(0)==' '){
-                    if (checkInput.charAt(0) == (' ')) {
-                        checkInput = checkInput.substring(1);}
-                }
-                //удаляем все пробелы введенные пользователем с конца строки строки
-                while (checkInput.charAt(checkInput.length()-1)==' '){
-                    if (checkInput.charAt(checkInput.length()-1) == (' ')) {
-                        checkInput =  checkInput.substring(0, (checkInput.length() - 1));
-                    }
-                }
-*/
 
                 //Используем метод трим для удаления лишних пробелов с начала и конца строки
                 checkInput=checkInput.trim();
@@ -245,54 +232,45 @@ public class Main {
                     break;
                 }
 
-                //Удаляем пробелы из строки
+
+                //delete all spaces
                 checkInput = checkInput.replace(" ","");
 
+                //replace "+" -> " + " and all op symbols
+                checkInput = checkInput.replace("+"," + ");
+                checkInput = checkInput.replace("-"," - ");
+                checkInput = checkInput.replace("/"," / ");
+                checkInput = checkInput.replace("*"," * ");
 
-                //Теперь надо спарсить строку в переменные a op b
-                String a = "";
-                String b = "";
-                String op = "";
-                resStr = checkInput;
+                //create array from string
+                String[] mathExp = checkInput.split(" ");
 
-                //получаем а
-                for (int i=0;i<checkInput.length();i++){
-                    if (numSet.contains("" + checkInput.charAt(i))) {
-                        a = a + checkInput.charAt(i);
-                    } else {
-                        op = op + checkInput.charAt(i);
-                        break;
-                    }
+
+
+                //проверяем размер массива
+                if (mathExp.length<=2) {
+                error++;
+                    System.out.println("Введенное выражение нельзя разделить на <операнд> + <операция> + <операнд>");
                 }
-                //получаем b
-                for (int i=(0+a.length()+op.length());i<checkInput.length();i++){
-                    if (numSet.contains("" + checkInput.charAt(i))) {
-                        b = b + checkInput.charAt(i);
-                    } else {
-                        break;
-                    }
+                if (error>0){
+                    break;
                 }
-                System.out.print(a+" ");
-                System.out.print(op+" ");
-                System.out.println(b);
 
+                //import operands from array
 
-
-
-
-
-
+                String a = mathExp[0];
+                String op = mathExp[1];
+                String b = mathExp[2];
 
 
                 //проверка на длинну выражения
-                if (!(checkInput.equals((a+op+b)))) {
+                if (!(checkInput.replace(" ","").equals((a+op+b)))) {
                     System.out.println("Введенное выражение нельзя разделить на <операнд> + <операция> + <операнд> и ничего не потерять");
                     error++;
                 }
                 if (error>0){
                     break;
                 }
-
 
                 //Пользователь ввел недостаточно информации
                 if ((b.length() == 0)||(a.length() == 0) || (op.length() == 0)) {
@@ -302,6 +280,7 @@ public class Main {
                 if (error>0){
                     break;
                 }
+
 
 
                 //Калькулятор умеет работать только с целыми числами.
