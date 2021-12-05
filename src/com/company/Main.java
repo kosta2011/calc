@@ -167,8 +167,6 @@ public class Main {
                 int error = 0;
 
 
-
-
                 //ввод с клавиатуры
                 Scanner consoleRAW = new Scanner(System.in);
                 String checkInput = consoleRAW.nextLine();
@@ -178,7 +176,7 @@ public class Main {
                 //Он должен обрабатывать все возможные исключения
                 String resStr = "";
 
-
+/*
                 //удаляем все пробелы введенные пользователем с начала строки
                 while (checkInput.charAt(0)==' '){
                     if (checkInput.charAt(0) == (' ')) {
@@ -190,7 +188,14 @@ public class Main {
                         checkInput =  checkInput.substring(0, (checkInput.length() - 1));
                     }
                 }
-                //удаляем все пробелы если они стоят вместе и оставляем только один
+*/
+
+                //Используем метод трим для удаления лишних пробелов с начала и конца строки
+                checkInput=checkInput.trim();
+
+
+                //схлопываем пробелы посреди текста
+                //x    x -> x x
                 for (int i = 0;i<(checkInput.length());i++) {
 
                     if ((checkInput.charAt(i) == (' ') && ((checkInput.charAt(i + 1) == (' '))))) {
@@ -202,23 +207,85 @@ public class Main {
                 checkInput = resStr;
 
 
+                //приводим строку к верхнему регистру (для удобства)
+                //i->I    v->V
+                checkInput = checkInput.toUpperCase();
 
 
 
-                //обрабатываем сканер консоль получая стринг
-                //молимся на то чтобы пользователь ввел A + B
-                //код который проверяет не равен ли b.length() == 0
+                //проверяем нет ли пробелов между числами
+                HashSet<String> numSet = new HashSet<>();
+                numSet.add("0");
+                numSet.add("1");
+                numSet.add("2");
+                numSet.add("3");
+                numSet.add("4");
+                numSet.add("5");
+                numSet.add("6");
+                numSet.add("7");
+                numSet.add("8");
+                numSet.add("9");
+                numSet.add("I");
+                numSet.add("V");
+                numSet.add("X");
+                numSet.add("C");
+                numSet.add("L");
+                numSet.add("D");
+                numSet.add("M");
+                for (int i = 1;i<(checkInput.length()-1);i++) {
 
-                Scanner console = new Scanner(checkInput);
-                String a = console.next();
-                String op = console.next();
-                String b = console.next();
+                    if (numSet.contains("" + checkInput.charAt(i-1)) && (checkInput.charAt(i) == (' ')) &&
+                            numSet.contains("" + checkInput.charAt(i+1)))
+                    {
+                        System.out.println("Между двумя цифрами отсутсвует оператор");
+                        error++;
+                    }
+                }
+                if (error>0){
+                    break;
+                }
+
+                //Удаляем пробелы из строки
+                checkInput = checkInput.replace(" ","");
+
+
+                //Теперь надо спарсить строку в переменные a op b
+                String a = "";
+                String b = "";
+                String op = "";
+                resStr = checkInput;
+
+                //получаем а
+                for (int i=0;i<checkInput.length();i++){
+                    if (numSet.contains("" + checkInput.charAt(i))) {
+                        a = a + checkInput.charAt(i);
+                    } else {
+                        op = op + checkInput.charAt(i);
+                        break;
+                    }
+                }
+                //получаем b
+                for (int i=(0+a.length()+op.length());i<checkInput.length();i++){
+                    if (numSet.contains("" + checkInput.charAt(i))) {
+                        b = b + checkInput.charAt(i);
+                    } else {
+                        break;
+                    }
+                }
+                System.out.print(a+" ");
+                System.out.print(op+" ");
+                System.out.println(b);
 
 
 
 
-                //Похоже ли то что ввел пользователь на то что мы хотели от него?
-                if (!(checkInput.equals((a+" "+op+" "+b)))) {
+
+
+
+
+
+                //проверка на длинну выражения
+                if (!(checkInput.equals((a+op+b)))) {
                     System.out.println("Введенное выражение нельзя разделить на <операнд> + <операция> + <операнд> и ничего не потерять");
                     error++;
                 }
@@ -228,28 +295,13 @@ public class Main {
 
 
                 //Пользователь ввел недостаточно информации
-                if (b.length() == 0) {
-                    System.out.println("Кажется вы забыли пробелы или ввели что-то не правильно");
+                if ((b.length() == 0)||(a.length() == 0) || (op.length() == 0)) {
+                    System.out.println("Кажется что-то пошло не так, я на чувствую одного из операндов");
                     error++;
                 }
                 if (error>0){
                     break;
                 }
-
-
-
-
-
-
-
-                //приводим строки к верхнему регистру (для удобства)
-                //i->I    v->V
-                a = a.toUpperCase();
-                b = b.toUpperCase();
-
-
-
-
 
 
                 //Калькулятор умеет работать только с целыми числами.
@@ -337,16 +389,7 @@ public class Main {
                 }
 
 
-/*
 
-текст чисто по приколу
-
-            //Проверка на наличие операндов
-            if ((a.equals("")) || b.equals("") || op.equals("")) {
-                errors.add("Один из операндов отсуствует");
-            }
-
-*/
 
 
 
